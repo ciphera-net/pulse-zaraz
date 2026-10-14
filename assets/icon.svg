@@ -1,0 +1,9 @@
+<!--
+  PLACEHOLDER — not the Pulse brand mark. Swap for the real vector logo before
+  this component is ever loaded into a real Zaraz dashboard (see LISTING.md).
+  A plain pulse-line glyph, drawn for this repo, carrying no platform's mark.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M5 16h5l2-7 4 14 3-9 2 2h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

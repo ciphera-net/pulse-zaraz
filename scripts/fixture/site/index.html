@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>pulse-zaraz verify fixture</title>
+  </head>
+  <body>
+    <h1>pulse-zaraz verify fixture</h1>
+    <p>
+      A trivial page for scripts/verify.sh to proxy through WebCM. It carries
+      no Pulse tag of its own — any tag found in the DOM after a browser loads
+      this THROUGH WebCM came from the component under test, not from this
+      file. The negative control loads this same file DIRECTLY (bypassing
+      WebCM) and must find nothing.
+    </p>
+  </body>
+</html>

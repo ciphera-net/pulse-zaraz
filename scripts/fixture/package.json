@@ -1,0 +1,9 @@
+{
+  "name": "pulse-zaraz-verify-fixture",
+  "private": true,
+  "description": "Not part of the published component. Playwright for scripts/verify.sh's real-install assertions only.",
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.49.1"
+  }
+}

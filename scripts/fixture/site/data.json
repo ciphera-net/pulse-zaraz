@@ -1,0 +1,3 @@
+{
+  "note": "A non-HTML fixture. WebCM (like Zaraz) only rewrites text/html responses — see src/server.ts's 'accept includes text/html' check — so a JSON endpoint never gets WebCM's own client runtime injected at all, and therefore never gets a Pulse tag either. This is the Zaraz/WebCM structural equivalent of the 'admin pages are excluded' case the Drupal/Joomla/TYPO3 harnesses assert: here it isn't this component's own code that excludes it, it's the Component Manager's content-type guard, and the assertion exists to prove that guarantee rather than assume it."
+}

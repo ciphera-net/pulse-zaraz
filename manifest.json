@@ -1,0 +1,39 @@
+{
+  "name": "Pulse Analytics",
+  "description": "Privacy-first web analytics. No cookies, no personal data, and the script it adds to your pages is under 3 KB.",
+  "namespace": "pulse",
+  "icon": "assets/icon.svg",
+  "categories": ["Analytics"],
+  "provides": ["events"],
+  "allowCustomFields": false,
+  "fields": [
+    {
+      "name": "domain",
+      "type": "text",
+      "label": "Domain",
+      "description": "The domain this site is registered under in Pulse, e.g. example.com. Leave empty to let the tracker use the browser's own hostname — correct for a site served on one domain.",
+      "required": false
+    },
+    {
+      "name": "companion",
+      "type": "text",
+      "label": "Record clicks, copies and form submits",
+      "description": "Enter true to load a second, separate script that records clicks, copies and form submits. It is a second request on purpose: the core script's size is a published claim and nothing is folded into it to make a feature look free. Leave empty or false to turn it off.",
+      "required": false,
+      "default": "false"
+    },
+    {
+      "name": "api",
+      "type": "text",
+      "label": "Custom API origin",
+      "description": "Optional. Route events through your own proxy origin, e.g. https://example.com. A bare origin, not a full URL — the tracker appends its own path. Leave empty unless you have set a proxy up.",
+      "required": false
+    }
+  ],
+  "permissions": {
+    "execute_unsafe_scripts": {
+      "description": "Pulse Analytics adds a <script> element to the page pointing at js.ciphera.net/script.js (and, if enabled, a second one for the companion interaction script). No other client-side logic runs — the component does not read or write cookies, make its own network request, or touch anything else on the page.",
+      "required": true
+    }
+  }
+}
