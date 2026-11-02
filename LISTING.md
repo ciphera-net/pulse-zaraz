@@ -35,7 +35,7 @@ link. Do not add marketing copy there; it would be the only entry that does.
 
 **Description** (manifest `description`, shown wherever Zaraz surfaces it):
 
-> Privacy-first web analytics. No cookies, no personal data, and the script it
+> Privacy-first web analytics. No cookies, no IP addresses stored, and the script it
 > adds to your pages is under 3 KB.
 
 **Category:** `Analytics`
@@ -55,7 +55,7 @@ README.md).
 ## Copy rules this listing follows (same as every other Pulse surface)
 
 - Always "Pulse Analytics", never an abbreviation.
-- "No cookies, no personal data" — never "GDPR compliant", "no tracking" or
+- "No cookies, no IP addresses stored" — never "GDPR compliant", "no tracking" or
   "no consent banner needed". Those are legal claims this repo does not make.
 - "Under 3 KB" — never a specific different figure (e.g. "2.7 KB"). That is
   the one published size claim and it is shared across every Pulse surface;
