@@ -54,7 +54,7 @@ one and this one.
 5. Configure the settings. Name the tool "Pulse Analytics" and set `domain` to
    the domain this site is registered under in Pulse. For a site served on one
    domain, leave it empty and the tracker uses the browser's own hostname. See
-   "What the Zaraz dashboard actually renders" below before you look for a
+   "What the Zaraz dashboard renders" below before you look for a
    dropdown or a checkbox here.
 6. Add a Trigger. Every Zaraz tool, built-in or custom, runs only when a
    Trigger tells it to. The default "Pageview" trigger, which covers all page
@@ -69,7 +69,7 @@ one and this one.
 | `companion` | `false` | Enter `true` to also load the companion script, which records clicks, copies and form submits. It loads in a second, separate request (see below). |
 | `api` | empty | Route events through your own proxy origin. Enter the origin only, without a path. |
 
-### What the Zaraz dashboard actually renders for a Custom Managed Component
+### What the Zaraz dashboard renders for a Custom Managed Component
 
 `manifest.json` declares these settings as typed `fields`, per the
 [Managed Components manifest spec](https://managedcomponents.dev/specs/manifest/options).
@@ -91,7 +91,7 @@ defensively, so a `companion` value typed as the literal text `true` works
 exactly like a real boolean, because the dashboard is reported to take free
 text.
 
-## Why client-side injection, not server-side forwarding
+## Why client-side injection instead of server-side forwarding
 
 Zaraz's own generic client-side runtime already captures a `pageview` event
 and hands it to every configured component on the server. The established

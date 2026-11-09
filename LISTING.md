@@ -55,8 +55,9 @@ README.md).
 ## Copy rules this listing follows (same as every other Pulse surface)
 
 - Always "Pulse Analytics", never an abbreviation.
-- "No cookies, no IP addresses stored" — never "GDPR compliant", "no tracking" or
-  "no consent banner needed". Those are legal claims this repo does not make.
+- The privacy wording is "sets no cookies and never stores IP addresses" (approved 02-11-2026). Never "GDPR
+  compliant" or "no tracking": those are legal claims this repo does not make. ("No consent banner needed" is
+  allowed: ruled correct on 30-10-2026.)
 - "Under 3 KB" — never a specific different figure (e.g. "2.7 KB"). That is
   the one published size claim and it is shared across every Pulse surface;
   a different number here would be a second, disagreeing claim.

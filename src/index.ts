@@ -22,7 +22,7 @@ export {
  * our own, no `manager.fetch`. It puts Pulse's real tracker on the page —
  * `js.ciphera.net/script.js`, the exact file every other Pulse install loads
  * — rather than reimplementing any of its measurement logic inside Zaraz.
- * See README.md ("Why client-side injection, not server-side forwarding")
+ * See README.md ("Why client-side injection instead of server-side forwarding")
  * for the reasoning and the trade-off this costs.
  *
  * Settings are resolved once, outside the event listener: they come from the
