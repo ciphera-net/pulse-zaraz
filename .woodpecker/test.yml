@@ -1,0 +1,42 @@
+# Runs on pull_request AND on push to main.
+#
+# A workflow that only runs on pull requests checks the proposal and never the
+# branch that ships, so this one runs on both.
+#
+# What this covers: the type check, the unit tests and the bundle step, the same
+# things `npm run build` runs locally. Nothing here deploys: the component is
+# built from source by whoever installs it.
+#
+# What this does NOT cover: scripts/verify.sh, which drives a real component
+# manager (WebCM) and a headless browser, and a real Cloudflare account with
+# Zaraz enabled. Run verify.sh before a release.
+when:
+  - event: pull_request
+  - event: push
+    branch: main
+
+labels:
+  runner: k8s
+
+steps:
+  - name: test
+    image: registry.ops.ciphera.net/mirror/docker.io/library/node:22-94c973596a85@sha256:94c973596a8581a87ba42746ceb0b0e0b5246d098de45b1ce04dcc967cfc5dfb
+    backend_options:
+      kubernetes:
+        resources:
+          requests: { memory: 512Mi, cpu: 250m }
+          limits: { memory: 1Gi }
+    commands:
+      # `npm ci` and not `npm install`: a stale node_modules invents a baseline
+      # that neither CI nor another machine shares.
+      - npm ci
+      - npm run typecheck
+      # One run writes the log and a JSON report. A zero-test run exits 0 on some
+      # vitest versions, so the count is asserted rather than trusted. It is a
+      # floor, not an equality: adding tests must never redden the build.
+      - npm test -- --reporter=default --reporter=json --outputFile.json=/tmp/vitest.json
+      - |
+        COUNT=$(node -e "try{const r=require('/tmp/vitest.json');console.log(r.numTotalTests||0)}catch(e){console.log(0)}")
+        echo "vitest collected $COUNT test(s)"
+        [ "$COUNT" -ge 33 ] || { echo "REFUSING: expected at least 33 tests, collected $COUNT. The suite shrank or stopped being collected."; exit 1; }
+      - npm run bundle

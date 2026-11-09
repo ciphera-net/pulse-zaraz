@@ -22,7 +22,7 @@ anywhere, to anyone.
 ## What a release actually is
 
 1. Tag a version in this repo (`git tag vX.Y.Z`) once `npm run build` is
-   green. This repo has **no CI configured yet** — see "Open item: CI" below.
+   green. CI runs the same checks on every pull request (see "CI" below).
 2. Nothing is published to npm, GitHub Packages or any other registry. The
    component is deployed from **source**, per the install steps above, using
    `managed-component-to-cloudflare-worker` directly against the built file —
@@ -55,16 +55,12 @@ anywhere, to anyone.
      in your Zaraz tools list" — the honest instruction is the Custom
      Managed Component path in README.md.
 
-## Open item: CI
+## CI
 
-This repo has no CI pipeline configured yet. **Do not register one without
-checking CI capacity first** — this team runs one dedicated CI node for
-ordinary work, and a new repo's pipeline competes for it. When it is set up,
-it should run exactly what `npm run build` already runs locally
-(`tsc --noEmit`, `vitest run`, the esbuild bundle) on push and PR — no deploy
-step, because there is nothing this team deploys (see above). Follow the
-shape of `pulse-astro`'s or `pulse-docusaurus`'s CI config, which runs tests
-only and has no deploy step, not a repo whose CI also deploys.
+Since 09-11-2026 Woodpecker runs the security scan and what `npm run build`
+runs locally (`tsc --noEmit`, `vitest run`, the esbuild bundle) on every pull
+request and push to `main`. There is no deploy step, because nothing here is
+deployed (see above).
 
 ## Verifying a built release
 
