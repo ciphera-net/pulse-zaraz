@@ -36,7 +36,7 @@ export function isValidDomain(domain: string): boolean {
 
 /** The settings shape Zaraz hands back as `ComponentSettings`. A Custom
  *  Managed Component's own "Settings" screen is a free-text key/value editor
- *  (see README — "What the Zaraz dashboard actually renders"), not a typed
+ *  (see README, "What the Zaraz dashboard renders"), not a typed
  *  form built from this manifest, so `companion` can arrive as a real boolean
  *  OR as whatever string the site owner typed into a text field. */
 export interface PulseSettings {
