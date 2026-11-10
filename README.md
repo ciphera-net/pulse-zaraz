@@ -372,7 +372,6 @@ before this is relied on:
   "Testing" above and the next bullet).
 - Whether a Cloudflare curated-catalogue submission is realistic at all. No
   documented public submission process was found (see LISTING.md).
-- The icon is a placeholder for the real Pulse brand mark (see LISTING.md).
 
 ## Licence
 
