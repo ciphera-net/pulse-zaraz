@@ -66,13 +66,13 @@ README.md).
 
 ## Icon
 
-`assets/icon.svg` in this repo is a **placeholder** — a plain pulse-line
-glyph drawn for this repository, not the real Pulse brand mark (which was not
-available to build this integration). It carries no Cloudflare mark and
-claims no affiliation. **Swap it for the real vector logo before this
-component is ever loaded into a live Zaraz dashboard** — the file is small
-enough that a stale placeholder icon would be the first thing a site owner
-sees and the easiest thing to forget.
+`assets/icon.svg` is the Pulse mark in white layers on the brand orange
+`#FD5E0F`, the same icon as the Craft, Statamic and Framer listings, copied byte
+for byte from the brand library
+(`https://cdn.ciphera.net/brand/v12/kit/craft/pulse/icon.svg`, SHA-256
+`2255d21f32933e8f33a919943cc8423dda260343a12088347e5ab183930e0abe`). It replaced a placeholder
+pulse-line glyph on 10-11-2026. It carries no Cloudflare mark and claims no
+affiliation.
 
 ## Logo and trademark — no Cloudflare mark anywhere in this listing
 

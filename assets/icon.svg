@@ -1,9 +1,1 @@
-<!--
-  PLACEHOLDER — not the Pulse brand mark. Swap for the real vector logo before
-  this component is ever loaded into a real Zaraz dashboard (see LISTING.md).
-  A plain pulse-line glyph, drawn for this repo, carrying no platform's mark.
--->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.5"/>
-  <path d="M5 16h5l2-7 4 14 3-9 2 2h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" rx="0.00" fill="#FD5E0F"/><svg x="145.59" y="92.16" width="220.81" height="327.68" viewBox="0.0 0.0 885.47 1314.02"><title>Pulse</title><path d="M53.02 731.62L454.26 731.62L454.26 1263.61C454.26 1291.45 431.69 1314.02 403.85 1314.02L104.11 1314.02C75.89 1314.02 53.02 1289.95 53.02 1260.24ZM454.25 731.61L53 731.61L53 731.34L53.02 731.33L253.23 563.98L453.57 397.35L453.63 397.3Z" fill="#ffffff" fill-opacity="0.55"/><path d="M0 0L0 226.57C0 320.2 107.46 396.1 201.1 396.1L454.5 396.1L454.5 731.61L519.66 731.61C721.69 731.61 885.47 567.84 885.47 365.8C885.47 163.78 721.69 0 519.66 0Z" fill="#ffffff"/></svg></svg>
