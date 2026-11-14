@@ -33,10 +33,11 @@ steps:
       - npm run typecheck
       # One run writes the log and a JSON report. A zero-test run exits 0 on some
       # vitest versions, so the count is asserted rather than trusted. It is a
-      # floor, not an equality: adding tests must never redden the build.
+      # floor, not an equality: adding tests must never redden the build. It went
+      # from 33 to 32 in 0.2.0, when the companion setting and its test were removed.
       - npm test -- --reporter=default --reporter=json --outputFile.json=/tmp/vitest.json
       - |
         COUNT=$(node -e "try{const r=require('/tmp/vitest.json');console.log(r.numTotalTests||0)}catch(e){console.log(0)}")
         echo "vitest collected $COUNT test(s)"
-        [ "$COUNT" -ge 33 ] || { echo "REFUSING: expected at least 33 tests, collected $COUNT. The suite shrank or stopped being collected."; exit 1; }
+        [ "$COUNT" -ge 32 ] || { echo "REFUSING: expected at least 32 tests, collected $COUNT. The suite shrank or stopped being collected."; exit 1; }
       - npm run bundle
