@@ -227,7 +227,7 @@ run_webcm() {
 }
 
 assert_case() {
-  # $1 label, $2 url, $3 expect_script(1/0), $4 expect_domain, $5 expect_api, $6 expect_companion(1/0)
+  # $1 label, $2 url, $3 expect_script(1/0), $4 expect_domain, $5 expect_api ($6 is unused: the interactions script must always be absent)
   # Deps are installed once, above, into $FIXTURE/node_modules — mounted
   # read-only here on purpose (nothing in this container should write to
   # the fixture). Do NOT reintroduce a per-call `npm install`: see the
@@ -235,7 +235,7 @@ assert_case() {
   docker run --rm --network "$NETWORK" \
     -v "$FIXTURE":/fixture:ro -w /fixture \
     -e URL="$2" -e LABEL="$1" -e EXPECT_SCRIPT="$3" -e EXPECT_DOMAIN="$4" \
-    -e EXPECT_API="$5" -e EXPECT_COMPANION="$6" \
+    -e EXPECT_API="$5" \
     "$PLAYWRIGHT_IMAGE" \
     node assert.mjs
 }
@@ -248,7 +248,7 @@ assert_case "domain only" "http://$WEBCM:8787/" 1 "example.com" "" 0 \
   && echo "  ok" || FAILURES=$((FAILURES+1))
 
 run_webcm "$ROOT" "chosen.dev" "true" "https://proxy.example.com" "execute_unsafe_scripts" || FAILURES=$((FAILURES+1))
-assert_case "domain + api + companion, companion carries neither of its own" "http://$WEBCM:8787/" 1 "chosen.dev" "https://proxy.example.com" 1 \
+assert_case "domain + api, and an old companion value is ignored: one script" "http://$WEBCM:8787/" 1 "chosen.dev" "https://proxy.example.com" 0 \
   && echo "  ok" || FAILURES=$((FAILURES+1))
 
 run_webcm "$ROOT" "" "false" "" "execute_unsafe_scripts" || FAILURES=$((FAILURES+1))

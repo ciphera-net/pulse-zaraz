@@ -1,8 +1,8 @@
 # Pulse Analytics for Cloudflare Zaraz
 
 This Managed Component adds privacy-first analytics to a site that uses
-Cloudflare Zaraz. Pulse Analytics sets no cookies and never stores IP addresses,
-and the script it adds to your pages is under 3 KB.
+Cloudflare Zaraz. Pulse Analytics sets no cookies and never stores IP addresses.
+The script is about 3 KB.
 
 [Pulse Analytics](https://pulse.ciphera.net) is built by
 [Ciphera](https://ciphera.net), a company in Belgium, and hosted in
@@ -66,8 +66,16 @@ one and this one.
 | Setting | Default | What it does |
 |---|---|---|
 | `domain` | empty | The domain this site is registered under in Pulse. Empty means auto-detect. |
-| `companion` | `false` | Enter `true` to also load the companion script, which records clicks, copies and form submits. It loads in a second, separate request (see below). |
 | `api` | empty | Route events through your own proxy origin. Enter the origin only, without a path. |
+
+Scroll depth, outbound links, file downloads, and clicks, copies and form
+submits are each switched on or off in your site's settings in Pulse
+(Settings → General). The tag stays the same, so there is nothing to change
+here.
+
+Version 0.2.0 removed the `companion` setting. A tool that was deployed earlier
+may still pass it. The component accepts the value, ignores it, and logs one
+line at start-up saying so.
 
 ### What the Zaraz dashboard renders for a Custom Managed Component
 
@@ -85,11 +93,9 @@ suggests Cloudflare renders their settings UI from something else, outside the
 open manifest. We have not driven a real Zaraz dashboard to confirm this
 ourselves (see "Open risks and unverified claims" below).
 
-`manifest.json`'s `fields` array is kept as documentation of the three settings
-and their defaults. The component's own code (`isTruthy()`) is written
-defensively, so a `companion` value typed as the literal text `true` works
-exactly like a real boolean, because the dashboard is reported to take free
-text.
+`manifest.json`'s `fields` array is kept as documentation of the two settings.
+The Zaraz dashboard can pass a setting as free text, so the component reads
+every value defensively and never throws on an unexpected one.
 
 ## Why client-side injection instead of server-side forwarding
 
@@ -177,12 +183,10 @@ exactly:
 <script defer data-domain="example.com" data-api="https://proxy.example.com" src="https://js.ciphera.net/script.js"></script>
 ```
 
-(`data-api` appears only when the `api` setting is configured.) With the
-companion setting on, a second
-`<script defer src="https://js.ciphera.net/script.interactions.js"></script>`
-is also appended. It carries no `data-domain` or `data-api` of its own: the
-tracker resolves both once, from the core script, and a second copy of either
-would be a second thing to keep in step.
+(`data-api` appears only when the `api` setting is configured.) The component
+adds this one tag. The tracker loads its interactions script by itself, from
+the same host, when "Clicks, copies and forms" is on in your site's settings in
+Pulse. The core script is about 3 KB and the interactions script about 1 KB.
 
 The `api` setting ships as a `data-api` attribute on the core script element,
 the same way `data-domain` does. This matches the Drupal, Joomla and TYPO3
@@ -259,7 +263,7 @@ Safari is the easiest browser to verify an install in.
 ```bash
 npm install
 npm run typecheck   # tsc --noEmit — clean
-npm run test        # vitest run — 33 tests, all passing
+npm run test        # vitest run: 32 tests, all passing
 npm run bundle      # esbuild → dist/index.js, ~1.7 KB minified, zero imports
 ```
 
@@ -290,7 +294,7 @@ before that run):
 - The harness's `webcm.config.ts` used a path-based `DirectComponentConfig`.
   WebCM 0.10.9's own `ManagerGeneric.init()` hard-codes `settings = {}` for that
   branch. This was confirmed live, with a direct POST to `/webcm/track`:
-  `data-domain`, `data-api` and `companion` were always absent, even with the
+  `data-domain` and `data-api` were always absent, even with the
   corresponding settings correctly configured. This is a limitation of WebCM's
   local dev CLI. It does not apply to real Cloudflare Zaraz, whose
   component-loading implementation is separate. That implementation was not
@@ -303,9 +307,8 @@ The shipped bytes below were captured with a real headless browser against the
 real `webcm@0.10.9` dev server:
 
 ```html
-<!-- domain, api and companion all set -->
+<!-- domain and api set -->
 <script defer="" data-domain="example.com" data-api="https://proxy.example.com" src="https://js.ciphera.net/script.js"></script>
-<script defer="" src="https://js.ciphera.net/script.interactions.js"></script>
 
 <!-- domain empty (auto-detect) or invalid (dropped) — byte-identical either way -->
 <script defer="" src="https://js.ciphera.net/script.js"></script>
@@ -318,7 +321,7 @@ non-HTML case (`/data.json`) both carry zero `<script>` tags, confirmed by
 The tests prove the following, and one gap is left:
 
 - `src/pulse.test.ts` proves the bootstrap-building logic: domain normalisation
-  and validation, the companion/API behaviour, and exactly which DOM the
+  and validation, the API behaviour, the ignored `companion` option, and exactly which DOM the
   generated JavaScript builds (executed against a real DOM via
   `new Function(js)()`, the same technique `pulse-astro` uses).
 - `src/index.test.ts` proves the component's wiring against a fake

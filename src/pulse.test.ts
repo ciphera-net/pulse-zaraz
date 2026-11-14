@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest"
+
+const INTERACTIONS_URL = "https://js.ciphera.net/script.interactions.js"
 import {
   SCRIPT_URL,
-  COMPANION_URL,
   normalizeDomain,
   isValidDomain,
   isTruthy,
@@ -127,13 +128,13 @@ describe("buildBootstrap", () => {
   it("emits only the core script by default", () => {
     const js = buildBootstrap("example.com")
     expect(js).toContain(SCRIPT_URL)
-    expect(js).not.toContain(COMPANION_URL)
+    expect(js).not.toContain(INTERACTIONS_URL)
   })
 
-  it("adds the companion as a SECOND request, never folded into the core", () => {
+  it("ignores a deprecated companion option: still only the core script", () => {
     const js = buildBootstrap("example.com", { companion: true })
     expect(js).toContain(SCRIPT_URL)
-    expect(js).toContain(COMPANION_URL)
+    expect(js).not.toContain(INTERACTIONS_URL)
   })
 
   it("carries a custom API origin as a data-api argument to add()", () => {
@@ -170,23 +171,22 @@ describe("the bootstrap, executed", () => {
     expect(s!.getAttribute("data-api")).toBe("https://proxy.example.com")
   })
 
-  it("the companion carries no data-api of its own, same as data-domain", () => {
-    const [, companion] = run(
-      buildBootstrap("example.com", { companion: true, api: "https://proxy.example.com" })
-    )
-    expect(companion!.hasAttribute("data-api")).toBe(false)
-  })
-
   it("omits data-domain entirely when auto-detecting — never an empty attribute", () => {
     const [s] = run(buildBootstrap(null))
     expect(s!.hasAttribute("data-domain")).toBe(false)
   })
 
-  it("puts the core first and gives the companion no data-domain of its own", () => {
-    const [core, companion] = run(buildBootstrap("example.com", { companion: true }))
+  it("a deprecated companion option still builds exactly one script, with no flag attributes", () => {
+    const scripts = run(
+      buildBootstrap("example.com", { companion: true, api: "https://proxy.example.com" })
+    )
+    expect(scripts).toHaveLength(1)
+    const [core] = scripts
     expect(core!.src).toBe(SCRIPT_URL)
-    expect(companion!.src).toBe(COMPANION_URL)
-    expect(companion!.hasAttribute("data-domain")).toBe(false)
+    expect(core!.getAttribute("data-api")).toBe("https://proxy.example.com")
+    for (const attr of core!.getAttributeNames()) {
+      expect(attr.startsWith("data-no-") || attr.startsWith("data-ignore-")).toBe(false)
+    }
   })
 
   it("an invalid domain is dropped, never injected, even executed end to end", () => {
@@ -199,12 +199,12 @@ describe("the bootstrap, executed", () => {
     // Mutation-testable: delete the `ex[i].src===src` guard in pulse.ts and
     // this goes from 1 to 2.
     document.head.innerHTML = ""
-    const js = buildBootstrap("example.com", { companion: true })
+    const js = buildBootstrap("example.com")
     // eslint-disable-next-line no-new-func
     new Function(js)()
     // eslint-disable-next-line no-new-func
     new Function(js)()
     const scripts = Array.from(document.head.querySelectorAll("script"))
-    expect(scripts).toHaveLength(2) // core + companion, not 4
+    expect(scripts).toHaveLength(1) // one script, not 2
   })
 })

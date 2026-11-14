@@ -19,13 +19,12 @@
 //   EXPECT_SCRIPT     "1" | "0" — core script must (not) be present
 //   EXPECT_DOMAIN     expected data-domain value, or "" for "attribute absent"
 //   EXPECT_API        expected data-api value, or "" for "attribute absent"
-//   EXPECT_COMPANION  "1" | "0" — companion script must (not) be present
 //   WAIT_MS           how long to wait for the pageview round trip (default 2000)
 
 import { chromium } from "playwright"
 
 const SCRIPT_URL = "https://js.ciphera.net/script.js"
-const COMPANION_URL = "https://js.ciphera.net/script.interactions.js"
+const INTERACTIONS_URL = "https://js.ciphera.net/script.interactions.js"
 
 const env = (name, fallback) => (process.env[name] === undefined ? fallback : process.env[name])
 const url = env("URL")
@@ -33,7 +32,6 @@ const label = env("LABEL", url)
 const expectScript = env("EXPECT_SCRIPT", "1") === "1"
 const expectDomain = env("EXPECT_DOMAIN", "")
 const expectApi = env("EXPECT_API", "")
-const expectCompanion = env("EXPECT_COMPANION", "0") === "1"
 const waitMs = Number(env("WAIT_MS", "2000"))
 
 if (!url) {
@@ -60,7 +58,7 @@ try {
   )
 
   const core = scripts.find(s => s.src === SCRIPT_URL)
-  const companion = scripts.find(s => s.src === COMPANION_URL)
+  const interactions = scripts.find(s => s.src === INTERACTIONS_URL)
   const failures = []
 
   if (expectScript && !core) failures.push(`expected ${SCRIPT_URL} present, it was not`)
@@ -77,10 +75,11 @@ try {
     }
   }
 
-  if (expectCompanion && !companion) failures.push(`expected companion script present, it was not`)
-  if (!expectCompanion && companion) failures.push(`expected companion script ABSENT, it was present`)
-  if (companion && (companion.domain || companion.api)) {
-    failures.push(`companion must carry no data-domain/data-api of its own, got domain=${companion.domain} api=${companion.api}`)
+  // This component never adds the interactions script, whatever the settings
+  // were. The tracker loads it by itself when the site's settings in Pulse ask.
+  if (interactions) failures.push(`expected the interactions script ABSENT, it was present`)
+  if (scripts.filter(s => s.src.startsWith("https://js.ciphera.net/")).length > 1) {
+    failures.push(`expected exactly one js.ciphera.net script`)
   }
 
   if (failures.length === 0) {

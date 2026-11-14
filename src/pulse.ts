@@ -8,7 +8,6 @@
 // what the tag looks like is a drift bug waiting to happen.
 
 export const SCRIPT_URL = "https://js.ciphera.net/script.js"
-export const COMPANION_URL = "https://js.ciphera.net/script.interactions.js"
 
 /** A registrable hostname: labels of letters, digits and hyphens, at least one
  *  dot, a letter-only TLD. Deliberately strict — the value is interpolated
@@ -37,10 +36,13 @@ export function isValidDomain(domain: string): boolean {
 /** The settings shape Zaraz hands back as `ComponentSettings`. A Custom
  *  Managed Component's own "Settings" screen is a free-text key/value editor
  *  (see README, "What the Zaraz dashboard renders"), not a typed
- *  form built from this manifest, so `companion` can arrive as a real boolean
+ *  form built from this manifest, so a value can arrive as a real boolean
  *  OR as whatever string the site owner typed into a text field. */
 export interface PulseSettings {
   domain?: unknown
+  /** @deprecated Ignored since 0.2.0. The tracker loads its interactions
+   *  script by itself when the site's settings in Pulse turn it on. A tool
+   *  deployed before 0.2.0 may still pass the old value, so it stays accepted. */
   companion?: unknown
   api?: unknown
 }
@@ -81,6 +83,7 @@ export function resolveApi(settings: PulseSettings): string | null {
 }
 
 export interface BootstrapOptions {
+  /** @deprecated Ignored since 0.2.0: the bootstrap never adds a second script. */
   companion?: boolean
   api?: string | null
 }
@@ -104,10 +107,8 @@ export interface BootstrapOptions {
  *  agrees with the majority, which is the whole point of copying rather than
  *  re-deriving — see the file header.
  *
- *  Three details are load-bearing, copied from `pulse-astro`'s
+ *  Two details are load-bearing, copied from `pulse-astro`'s
  *  `buildBootstrap`:
- *  - `async = false` keeps the two scripts (core + companion) in insertion
- *    order, belt and braces rather than a correctness requirement.
  *  - `data-domain` and `data-api` are set BEFORE the element is appended, so
  *    they are already on the element when the tracker reads
  *    `document.currentScript` during its own execution. A classic script
@@ -145,7 +146,6 @@ export function buildBootstrap(domain: string | null, options: BootstrapOptions 
       api === null ? "null" : JSON.stringify(api)
     });`
   )
-  if (options.companion) lines.push(`add(${JSON.stringify(COMPANION_URL)},null,null);`)
 
   lines.push("})();")
   return lines.join("")
