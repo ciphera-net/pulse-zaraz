@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from "vitest"
 import type { Manager, MCEvent, Client } from "@managed-components/types"
-import pulse, { SCRIPT_URL, COMPANION_URL } from "./index.js"
+import pulse, { SCRIPT_URL } from "./index.js"
+
+const INTERACTIONS_URL = "https://js.ciphera.net/script.interactions.js"
 
 /**
  * This exercises the component's WIRING — that it registers exactly one
@@ -82,7 +84,7 @@ describe("the component's wiring", () => {
     const js = (client.execute as ReturnType<typeof vi.fn>).mock.calls[0]![0] as string
     expect(js).toContain(SCRIPT_URL)
     expect(js).toContain('"example.com"')
-    expect(js).not.toContain(COMPANION_URL)
+    expect(js).not.toContain(INTERACTIONS_URL)
   })
 
   it("auto-detect: an empty domain setting executes a bootstrap with no data-domain call", async () => {
@@ -103,22 +105,40 @@ describe("the component's wiring", () => {
     expect(js).toContain(`add(${JSON.stringify(SCRIPT_URL)},null,null)`)
   })
 
-  it("companion as the literal string 'true' (a free-text Settings field) still turns it on", async () => {
-    const { manager, listeners } = fakeManager()
-    await pulse(manager, { domain: "example.com", companion: "true" })
-    const client = fakeClient()
-    await fireEvent(listeners, "pageview", client)
-    const js = (client.execute as ReturnType<typeof vi.fn>).mock.calls[0]![0] as string
-    expect(js).toContain(COMPANION_URL)
+  it("an old companion value is accepted and ignored: one script, a warning once", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    try {
+      const { manager, listeners } = fakeManager()
+      await pulse(manager, { domain: "example.com", companion: "true" })
+      const client = fakeClient()
+      await fireEvent(listeners, "pageview", client)
+      await fireEvent(listeners, "pageview", client)
+      const calls = (client.execute as ReturnType<typeof vi.fn>).mock.calls
+      for (const call of calls) {
+        const js = call[0] as string
+        expect(js).not.toContain(INTERACTIONS_URL)
+        expect(js).toContain(SCRIPT_URL)
+      }
+      expect(warn).toHaveBeenCalledTimes(1)
+      expect(warn.mock.calls[0]![0]).toContain("ignored since 0.2.0")
+    } finally {
+      warn.mockRestore()
+    }
   })
 
-  it("companion left unset stays off", async () => {
-    const { manager, listeners } = fakeManager()
-    await pulse(manager, { domain: "example.com" })
-    const client = fakeClient()
-    await fireEvent(listeners, "pageview", client)
-    const js = (client.execute as ReturnType<typeof vi.fn>).mock.calls[0]![0] as string
-    expect(js).not.toContain(COMPANION_URL)
+  it("companion left unset gives one script and no warning", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    try {
+      const { manager, listeners } = fakeManager()
+      await pulse(manager, { domain: "example.com" })
+      const client = fakeClient()
+      await fireEvent(listeners, "pageview", client)
+      const js = (client.execute as ReturnType<typeof vi.fn>).mock.calls[0]![0] as string
+      expect(js).not.toContain(INTERACTIONS_URL)
+      expect(warn).not.toHaveBeenCalled()
+    } finally {
+      warn.mockRestore()
+    }
   })
 
   it("a custom API origin reaches the bootstrap as a data-api argument", async () => {
@@ -133,7 +153,7 @@ describe("the component's wiring", () => {
 
   it("touches nothing but client.execute — no cookies, no client fetch, no server fetch", async () => {
     const { manager, listeners } = fakeManager()
-    await pulse(manager, { domain: "example.com", companion: true })
+    await pulse(manager, { domain: "example.com" })
     const client = fakeClient()
     await fireEvent(listeners, "pageview", client)
     expect(client.set).not.toHaveBeenCalled()

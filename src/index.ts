@@ -4,7 +4,6 @@ import { buildBootstrap, resolveDomain, resolveApi, isTruthy, type PulseSettings
 export type { PulseSettings, BootstrapOptions } from "./pulse.js"
 export {
   SCRIPT_URL,
-  COMPANION_URL,
   normalizeDomain,
   isValidDomain,
   isTruthy,
@@ -33,9 +32,16 @@ export default async function (manager: Manager, settings: ComponentSettings) {
   const pulseSettings = settings as PulseSettings
   const domain = resolveDomain(pulseSettings)
   const api = resolveApi(pulseSettings)
-  const companion = isTruthy(pulseSettings.companion)
+
+  // The old `companion` value is accepted and ignored: a tool deployed before
+  // 0.2.0 may still pass it. One line, once, at start-up.
+  if (isTruthy(pulseSettings.companion)) {
+    console.warn(
+      "Pulse Analytics: the companion option has been ignored since 0.2.0: switch it in your site's settings in Pulse."
+    )
+  }
 
   manager.addEventListener("pageview", async (event: MCEvent) => {
-    event.client.execute(buildBootstrap(domain, { companion, api }))
+    event.client.execute(buildBootstrap(domain, { api }))
   })
 }

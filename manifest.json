@@ -1,6 +1,6 @@
 {
   "name": "Pulse Analytics",
-  "description": "Pulse Analytics adds privacy-first web analytics to a site that uses Cloudflare Zaraz. It sets no cookies and never stores IP addresses, and the script it adds to your pages is under 3 KB.",
+  "description": "Pulse Analytics adds privacy-first web analytics to a site that uses Cloudflare Zaraz. It sets no cookies and never stores IP addresses. The script is about 3 KB.",
   "namespace": "pulse",
   "icon": "assets/icon.svg",
   "categories": ["Analytics"],
@@ -15,14 +15,6 @@
       "required": false
     },
     {
-      "name": "companion",
-      "type": "text",
-      "label": "Record clicks, copies and form submits",
-      "description": "Enter true to load a second script that records clicks, copies and form submits. It loads as a separate request, so your pages only load it when you switch this on. Leave this empty or enter false to turn it off.",
-      "required": false,
-      "default": "false"
-    },
-    {
       "name": "api",
       "type": "text",
       "label": "Custom API origin",
@@ -32,7 +24,7 @@
   ],
   "permissions": {
     "execute_unsafe_scripts": {
-      "description": "Pulse Analytics adds a <script> element to the page pointing at js.ciphera.net/script.js, plus a second one for the companion interaction script if you turn it on. The component runs no other client-side logic: it does not read or write cookies, make its own network request, or touch anything else on the page.",
+      "description": "Pulse Analytics adds a <script> element to the page pointing at js.ciphera.net/script.js. The component runs no other client-side logic: it does not read or write cookies, make its own network request, or touch anything else on the page.",
       "required": true
     }
   }

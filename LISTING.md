@@ -35,15 +35,14 @@ link. Do not add marketing copy there; it would be the only entry that does.
 
 **Description** (manifest `description`, shown wherever Zaraz surfaces it):
 
-> Privacy-first web analytics. No cookies, no IP addresses stored, and the script it
-> adds to your pages is under 3 KB.
+> Privacy-first web analytics. It sets no cookies and never stores IP addresses.
+> The script is about 3 KB.
 
 **Category:** `Analytics`
 
 **Settings labels and descriptions:** see `manifest.json`'s `fields` array —
-`domain`, `companion` ("Record clicks, copies and form submits"), `api`
-("Custom API origin"). Keep these in step with README.md's Settings table;
-they are the same three settings described twice, once for the dashboard and
+`domain` and `api` ("Custom API origin"). Keep these in step with README.md's
+Settings table; they are the same two settings described twice, once for the dashboard and
 once for the person reading the repo before they get there.
 
 **Permission description:** one entry, `execute_unsafe_scripts` — see
@@ -58,7 +57,7 @@ README.md).
 - The privacy wording is "sets no cookies and never stores IP addresses" (approved 02-11-2026). Never "GDPR
   compliant" or "no tracking": those are legal claims this repo does not make. ("No consent banner needed" is
   allowed: ruled correct on 30-10-2026.)
-- "Under 3 KB" — never a specific different figure (e.g. "2.7 KB"). That is
+- "About 3 KB", never a specific different figure (e.g. "2.7 KB"). That is
   the one published size claim and it is shared across every Pulse surface;
   a different number here would be a second, disagreeing claim.
 - Belgium / Switzerland facts only where stated in README.md ("built by

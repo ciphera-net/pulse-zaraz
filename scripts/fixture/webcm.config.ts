@@ -11,7 +11,7 @@
 // 0.10.9's `ManagerGeneric.init()` hard-codes `settings = {}` for the `path`
 // branch (src/manager.ts) — a DirectComponentConfig's own `settings` field is
 // parsed, type-checked, and then silently thrown away before the component
-// ever sees it. Confirmed live: `data-domain`/`data-api`/`companion` were
+// ever sees it. Confirmed live: `data-domain`/`data-api` were
 // always absent even with PULSE_DOMAIN etc. correctly set — not because this
 // component mishandled them, but because they never arrived. The `name`
 // branch (`fetchLocalComponent`) has no such bug and additionally validates
